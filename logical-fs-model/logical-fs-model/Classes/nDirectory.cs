@@ -45,7 +45,7 @@ namespace logical_fs_model.Classes
         {
             if (Child.Contains(item))
                 Child.Remove(item);
-            else throw new FileOrDirectoryNotExistsException(item.Fullname);
+            else throw new FileOrDirectoryNotExistException(item.Fullname);
         }
 
         public void AppendChild(nItem item)
@@ -83,6 +83,20 @@ namespace logical_fs_model.Classes
             // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
+        }
+
+        public object Clone()
+        {
+            nDirectory clone = new nDirectory(this.Name)
+            {
+                Parent = this.Parent
+            };
+            foreach(nItem item in Child)
+            {
+                clone.AppendChild((nItem)item.Clone());
+            }
+            return clone;
+
         }
     }
 }

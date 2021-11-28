@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using logical_fs_model.Exceptions;
 
 namespace logical_fs_model.Classes
 {
-    public class nFile : nItem
+    public class nDirectory : nItem
     {
 
         public Guid GUID { get; private set; }
-        public uint Size { get; private set; }
-        public string Fullname 
+        public uint Size { get; } = 4;
+        public string Fullname
         {
             get
             {
@@ -24,18 +25,26 @@ namespace logical_fs_model.Classes
                     rPath.Add(current.Name);
                 }
                 rPath.Reverse();
-                return string.Join("/", rPath.ToArray());
+                return string.Join("/", rPath.ToArray()) + "/";
             }
+            
         }
-        public string Shortname { get { return Name; }  }
+        public string Shortname { get => Name + "/"; }
+        public List<nItem> Child { get; private set; }
         public nItem Parent { get; set; }
-        public string Name { get;  set; }
+        public string Name { get; set; }
 
-        public nFile(string Name, uint Size)
+        public nDirectory(string Name)
         {
-            this.Size = Size;
             this.Name = Name;
+            this.Child = new List<nItem>();
             this.GUID = new Guid();
+        }
+        
+        public void AppendChild(nItem item)
+        {
+            if (Child.FindIndex(f => f.Shortname == item.Shortname) != -1) throw new FileOrDirectoryExistException(item.Shortname); 
+            Child.Add(item);
         }
     }
 }

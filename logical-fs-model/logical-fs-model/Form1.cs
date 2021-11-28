@@ -15,11 +15,11 @@ namespace logical_fs_model
     public partial class Form1 : Form
     {
         private nFileManager FileManager;
-        private List<nFile> CurrentFiles;
+        private List<nItem> CurrentFiles;
         public Form1()
         {
             FileManager = new nFileManager();
-            CurrentFiles = new List<nFile>();
+            CurrentFiles = new List<nItem>();
             InitializeComponent();
             ImageList il = new ImageList();
             
@@ -56,7 +56,7 @@ namespace logical_fs_model
                 lvDrawer.Items.Add(LVI);
             }
 
-            foreach (nFile file in FileManager.ListOfFilesHere())
+            foreach (nItem file in FileManager.ListOfFilesHere())
             {
                 CurrentFiles.Add(file);
                 string[] Subitems =
@@ -72,7 +72,7 @@ namespace logical_fs_model
                 lvDrawer.Items.Add(LVI);
 
             }
-            foreach (nFile file in CurrentFiles)
+            foreach (nItem file in CurrentFiles)
             {
                 string[] Subitems =
                 {
@@ -130,7 +130,7 @@ namespace logical_fs_model
         {
             foreach (int index in lvDrawer.SelectedIndices)
             {
-                nFile file = CurrentFiles[index];
+                nItem file = CurrentFiles[index];
                 FileManager.DeleteFile(file);
             }
             Draw();
@@ -139,7 +139,7 @@ namespace logical_fs_model
         private void lvDrawer_ItemActivate(object sender, EventArgs e)
         {
             int index = lvDrawer.SelectedIndices[0];
-            nFile activated = CurrentFiles[index];
+            nItem activated = CurrentFiles[index];
             if (activated.IsDirectory)
                 FileManager.CurrentDirectory = activated;
             Draw();

@@ -11,51 +11,15 @@ namespace logical_fs_model.Classes
         private static readonly string ForbiddenFilenameCharacters = "/\\:*+?<>\"";
         public nFileManager()
         {
-            nItem root = new nFile(true, "");
+            nItem root = new nDirectory("");
             CurrentDirectory = root;
             Filesystem.Add(root);
         }
         
-        public List<nItem> Filesystem = new List<nItem>();
-        public nItem Parent
-        {
-            get
-            {
-
-                string[] path = CurrentDirectory.Fullname.Split('/');
-
-                if (CurrentDirectory.Fullname != "/") 
-                {
-                    string prevpath = "";
-                    for (int i = 0; i < path.Length - 2; i++) 
-                        prevpath += path[i]+"/";
-                    return Filesystem.Find(f => f.Fullname == prevpath);
-                }
-                else return CurrentDirectory;
-            }
-        }
-        public nItem ParentOf(nItem file)
-        {
-            
-
-            string[] path = file.Fullname.Split('/');
-
-            if (file.Fullname != "/")
-            {
-                string prevpath = "";
-                for (int i = 0; i < path.Length - 2; i++)
-                    prevpath += path[i] + "/";
-                return Filesystem.Find(f => f.Fullname == prevpath);
-            }
-            else return file;
-            
-        }
-        public nItem CurrentDirectory { get; set; }
+        public nDirectory CurrentDirectory { get; set; }
         public List<nItem> ListOfFiles(nItem Directory)
         {
-            List<nItem> Result = Filesystem.FindAll(file => file.Fullname == (Directory.Fullname + file.Shortname));
-            Result.Remove(Directory);
-            return Result;
+            return CurrentDirectory.Child;
         }
 
         public List<nItem> ListOfFilesHere()

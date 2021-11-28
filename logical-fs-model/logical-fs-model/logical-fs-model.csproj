@@ -54,6 +54,7 @@
     <Compile Include="Classes\nItem.cs" />
     <Compile Include="Classes\nFileManager.cs" />
     <Compile Include="Exceptions\FileOrDirectoryExistException.cs" />
+    <Compile Include="Exceptions\FileOrDirectoryNotExistsException.cs" />
     <Compile Include="Exceptions\InvalidFilenameException.cs" />
     <Compile Include="FilenameDialog.cs">
       <SubType>Form</SubType>

@@ -9,14 +9,14 @@ using logical_fs_model.Exceptions;
 
 namespace logical_fs_model.Classes
 {
-    public interface nItem
+    public interface nItem : IDisposable
     {
         Guid GUID { get; }
         uint Size { get; }
         string Fullname { get; }
         string Shortname{ get; }
         string Name { get; }
-        nItem Parent { get; }
+        nDirectory Parent { get; set; }
 
 
     }

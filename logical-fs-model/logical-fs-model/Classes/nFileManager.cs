@@ -8,15 +8,16 @@ namespace logical_fs_model.Classes
 {
     public class nFileManager
     {
+        private static readonly string ForbiddenFilenameCharacters = "/\\:*+?<>\"";
         public nFileManager()
         {
-            nFile root = new nFile(true, "");
+            nItem root = new nFile(true, "");
             CurrentDirectory = root;
             Filesystem.Add(root);
         }
         
-        public List<nFile> Filesystem = new List<nFile>();
-        public nFile Parent
+        public List<nItem> Filesystem = new List<nItem>();
+        public nItem Parent
         {
             get
             {
@@ -33,7 +34,7 @@ namespace logical_fs_model.Classes
                 else return CurrentDirectory;
             }
         }
-        public nFile ParentOf(nFile file)
+        public nItem ParentOf(nItem file)
         {
             
 
@@ -49,15 +50,15 @@ namespace logical_fs_model.Classes
             else return file;
             
         }
-        public nFile CurrentDirectory { get; set; }
-        public List<nFile> ListOfFiles(nFile Directory)
+        public nItem CurrentDirectory { get; set; }
+        public List<nItem> ListOfFiles(nItem Directory)
         {
-            List<nFile> Result = Filesystem.FindAll(file => file.Fullname == (Directory.Fullname + file.Shortname));
+            List<nItem> Result = Filesystem.FindAll(file => file.Fullname == (Directory.Fullname + file.Shortname));
             Result.Remove(Directory);
             return Result;
         }
 
-        public List<nFile> ListOfFilesHere()
+        public List<nItem> ListOfFilesHere()
         {
             return ListOfFiles(CurrentDirectory);
         }
@@ -67,14 +68,14 @@ namespace logical_fs_model.Classes
         {
             return CreateFile(IsDirectory, CurrentDirectory, Filename, Size);
         }
-        public bool CreateFile(bool IsDirectory, nFile Directory, string Filename, int Size=0)
+        public bool CreateFile(bool IsDirectory, nItem Directory, string Filename, int Size=0)
         {
             try
             {
                 string fullname = Directory.Fullname + Filename;
-                nFile file = new nFile(IsDirectory, fullname);
+                nItem file = new nFile(IsDirectory, fullname);
                 if (Filesystem.Find(f => f.IsDirectory == file.IsDirectory && f.Fullname == file.Fullname) != null) return false;
-                Filesystem.Add(new nFile(IsDirectory, fullname, Size));
+                Filesystem.Add((nItem)new nFile(IsDirectory, fullname, Size));
                 return true;
             }
             catch
@@ -83,27 +84,27 @@ namespace logical_fs_model.Classes
             }
         }
 
-        public bool MoveFile(nFile file, nFile toDirectory)
+        public bool MoveFile(nItem file, nItem toDirectory)
         {
             file.Fullname = toDirectory.Fullname+ file.Shortname;
             return true;
 
         }
-        public bool DeleteFile(nFile file)
+        public bool DeleteFile(nItem file)
         {
 
             return Filesystem.Remove(file);
 
         }
         
-        public List<nFile> GetChildren(nFile file)
+        public List<nItem> GetChildren(nItem file)
         {
             return Filesystem.FindAll(f => f.Fullname.StartsWith(file.Fullname));
         }
 
-        public bool RenameFile(nFile file, string NewName)
+        public bool RenameFile(nItem file, string NewName)
         {
-            List<nFile> child = GetChildren(file);
+            List<nItem> child = GetChildren(file);
             string OldName = file.Shortname;
 
             foreach (var f in child)

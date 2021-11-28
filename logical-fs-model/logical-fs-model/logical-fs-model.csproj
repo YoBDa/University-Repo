@@ -46,11 +46,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\nDirectory.cs" />
     <Compile Include="Classes\nElement.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Classes\nFile.cs" />
+    <Compile Include="Classes\nItem.cs" />
     <Compile Include="Classes\nFileManager.cs" />
+    <Compile Include="Exceptions\FileOrDirectoryExistException.cs" />
     <Compile Include="Exceptions\InvalidFilenameException.cs" />
     <Compile Include="FilenameDialog.cs">
       <SubType>Form</SubType>

@@ -67,5 +67,13 @@ namespace logical_fs_model.Classes
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
+
+        public object Clone()
+        {
+            return new nFile(this.Name, this.Size)
+            {
+                Parent = this.Parent
+            };
+        }
     }
 }

@@ -46,6 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Cluster.cs" />
+    <Compile Include="Classes\FileRecord.cs" />
+    <Compile Include="Classes\Filesystem.cs" />
     <Compile Include="Classes\nDirectory.cs" />
     <Compile Include="Classes\nElement.cs">
       <SubType>Component</SubType>

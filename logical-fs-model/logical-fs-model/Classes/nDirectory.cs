@@ -12,7 +12,7 @@ namespace logical_fs_model.Classes
         private bool disposedValue;
 
         public Guid GUID { get; private set; }
-        public uint Size { get; } = 4;
+        public int Size { get; } = 4;
         public string Fullname
         {
             get

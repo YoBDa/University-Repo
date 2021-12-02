@@ -29,19 +29,29 @@ namespace logical_fs_model
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.panDrawArea = new System.Windows.Forms.Panel();
+            this.lvDrawer = new System.Windows.Forms.ListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.cmsBrowser = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.create = new System.Windows.Forms.ToolStripMenuItem();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.folderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rename = new System.Windows.Forms.ToolStripMenuItem();
+            this.copy = new System.Windows.Forms.ToolStripMenuItem();
+            this.cut = new System.Windows.Forms.ToolStripMenuItem();
+            this.paste = new System.Windows.Forms.ToolStripMenuItem();
+            this.button1 = new System.Windows.Forms.Button();
             this.btCreateFolder = new System.Windows.Forms.Button();
             this.btCreateFile = new System.Windows.Forms.Button();
             this.btRemove = new System.Windows.Forms.Button();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.lvDrawer = new System.Windows.Forms.ListView();
-            this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.lbCurDir = new System.Windows.Forms.Label();
             this.lbParDir = new System.Windows.Forms.Label();
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panDrawArea.SuspendLayout();
+            this.cmsBrowser.SuspendLayout();
             this.SuspendLayout();
             // 
             // panDrawArea
@@ -52,6 +62,105 @@ namespace logical_fs_model
             this.panDrawArea.Name = "panDrawArea";
             this.panDrawArea.Size = new System.Drawing.Size(593, 390);
             this.panDrawArea.TabIndex = 0;
+            // 
+            // lvDrawer
+            // 
+            this.lvDrawer.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader3});
+            this.lvDrawer.ContextMenuStrip = this.cmsBrowser;
+            this.lvDrawer.FullRowSelect = true;
+            this.lvDrawer.HideSelection = false;
+            this.lvDrawer.Location = new System.Drawing.Point(6, 6);
+            this.lvDrawer.Name = "lvDrawer";
+            this.lvDrawer.Size = new System.Drawing.Size(584, 381);
+            this.lvDrawer.TabIndex = 0;
+            this.lvDrawer.UseCompatibleStateImageBehavior = false;
+            this.lvDrawer.View = System.Windows.Forms.View.Details;
+            this.lvDrawer.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvDrawer_ColumnClick);
+            this.lvDrawer.ItemActivate += new System.EventHandler(this.lvDrawer_ItemActivate);
+            this.lvDrawer.SelectedIndexChanged += new System.EventHandler(this.lvDrawer_SelectedIndexChanged);
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "Name";
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "Size";
+            this.columnHeader3.Width = 162;
+            // 
+            // cmsBrowser
+            // 
+            this.cmsBrowser.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.cmsBrowser.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.create,
+            this.rename,
+            this.copy,
+            this.cut,
+            this.paste});
+            this.cmsBrowser.Name = "cmsBrowser";
+            this.cmsBrowser.Size = new System.Drawing.Size(211, 152);
+            // 
+            // create
+            // 
+            this.create.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
+            this.folderToolStripMenuItem});
+            this.create.Name = "create";
+            this.create.Size = new System.Drawing.Size(210, 24);
+            this.create.Text = "Create";
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.fileToolStripMenuItem.Text = "File";
+            this.fileToolStripMenuItem.Click += new System.EventHandler(this.fileToolStripMenuItem_Click);
+            // 
+            // folderToolStripMenuItem
+            // 
+            this.folderToolStripMenuItem.Name = "folderToolStripMenuItem";
+            this.folderToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.folderToolStripMenuItem.Text = "Folder";
+            this.folderToolStripMenuItem.Click += new System.EventHandler(this.folderToolStripMenuItem_Click);
+            // 
+            // rename
+            // 
+            this.rename.Name = "rename";
+            this.rename.Size = new System.Drawing.Size(210, 24);
+            this.rename.Text = "Rename";
+            this.rename.Click += new System.EventHandler(this.rename_Click);
+            // 
+            // copy
+            // 
+            this.copy.Name = "copy";
+            this.copy.Size = new System.Drawing.Size(210, 24);
+            this.copy.Text = "Copy";
+            this.copy.Click += new System.EventHandler(this.copy_Click);
+            // 
+            // cut
+            // 
+            this.cut.Name = "cut";
+            this.cut.Size = new System.Drawing.Size(210, 24);
+            this.cut.Text = "Cut";
+            this.cut.Click += new System.EventHandler(this.cut_Click);
+            // 
+            // paste
+            // 
+            this.paste.Name = "paste";
+            this.paste.Size = new System.Drawing.Size(210, 24);
+            this.paste.Text = "Paste";
+            this.paste.Click += new System.EventHandler(this.paste_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(80, 123);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
             // 
             // btCreateFolder
             // 
@@ -82,35 +191,6 @@ namespace logical_fs_model
             this.btRemove.Text = "Remove";
             this.btRemove.UseVisualStyleBackColor = true;
             this.btRemove.Click += new System.EventHandler(this.btRemove_Click);
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "Name";
-            // 
-            // lvDrawer
-            // 
-            this.lvDrawer.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader3});
-            this.lvDrawer.FullRowSelect = true;
-            this.lvDrawer.HideSelection = false;
-            this.lvDrawer.Location = new System.Drawing.Point(6, 6);
-            this.lvDrawer.Name = "lvDrawer";
-            this.lvDrawer.Size = new System.Drawing.Size(584, 381);
-            this.lvDrawer.TabIndex = 0;
-            this.lvDrawer.UseCompatibleStateImageBehavior = false;
-            this.lvDrawer.View = System.Windows.Forms.View.Details;
-            this.lvDrawer.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvDrawer_ColumnClick);
-            this.lvDrawer.ItemActivate += new System.EventHandler(this.lvDrawer_ItemActivate);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(80, 123);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
@@ -148,11 +228,6 @@ namespace logical_fs_model
             this.lbParDir.TabIndex = 7;
             this.lbParDir.Text = "/";
             // 
-            // columnHeader3
-            // 
-            this.columnHeader3.Text = "Size";
-            this.columnHeader3.Width = 162;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -169,6 +244,7 @@ namespace logical_fs_model
             this.Name = "Form1";
             this.Text = "Form1";
             this.panDrawArea.ResumeLayout(false);
+            this.cmsBrowser.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -188,6 +264,14 @@ namespace logical_fs_model
         private System.Windows.Forms.Label lbCurDir;
         private System.Windows.Forms.Label lbParDir;
         private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.ContextMenuStrip cmsBrowser;
+        private System.Windows.Forms.ToolStripMenuItem create;
+        private System.Windows.Forms.ToolStripMenuItem rename;
+        private System.Windows.Forms.ToolStripMenuItem copy;
+        private System.Windows.Forms.ToolStripMenuItem cut;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem folderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem paste;
     }
 }
 

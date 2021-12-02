@@ -18,6 +18,8 @@ namespace logical_fs_model
         private SortRules SortRule = SortRules.Name;
         private nFileManager FileManager;
         private List<nItem> CurrentFiles;
+        private nItem Buffer;
+        private bool isCut = false;
         public Form1()
         {
             FileManager = new nFileManager();
@@ -35,6 +37,10 @@ namespace logical_fs_model
 
             lvDrawer.SmallImageList = il;
             Draw();
+            cmsBrowser.Items["copy"].Enabled = false;
+            cmsBrowser.Items["cut"].Enabled = false;
+            cmsBrowser.Items["paste"].Enabled = false;
+            cmsBrowser.Items["rename"].Enabled = false;
 
         }
         private List<nItem> OrderedList(List<nItem> original)
@@ -59,6 +65,25 @@ namespace logical_fs_model
         }
         private void Draw()
         {
+
+            if (lvDrawer.SelectedIndices.Count == 0)
+            {
+
+                cmsBrowser.Items["copy"].Enabled = false;
+                cmsBrowser.Items["cut"].Enabled = false;
+                cmsBrowser.Items["rename"].Enabled = false;
+
+
+
+            }
+            else
+            {
+                cmsBrowser.Items["copy"].Enabled = true;
+                cmsBrowser.Items["cut"].Enabled = true;
+                cmsBrowser.Items["rename"].Enabled = true;
+
+            }
+
             lvDrawer.Items.Clear();
             CurrentFiles.Clear();
             ListViewItem LVI;
@@ -166,6 +191,93 @@ namespace logical_fs_model
                     Draw();
                     break;
             }
+        }
+
+        private void lvDrawer_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lvDrawer.SelectedIndices.Count == 0)
+            {
+                
+                cmsBrowser.Items["copy"].Enabled = false;
+                cmsBrowser.Items["cut"].Enabled = false;
+                cmsBrowser.Items["rename"].Enabled = false;
+
+
+
+            }
+            else
+            {
+                cmsBrowser.Items["copy"].Enabled = true;
+                cmsBrowser.Items["cut"].Enabled = true;
+                cmsBrowser.Items["rename"].Enabled = true;
+
+            }
+        }
+
+        private void rename_Click(object sender, EventArgs e)
+        {
+            FilenameDialog dialog = new FilenameDialog();
+            dialog.Show();
+            dialog.FormClosing += Rename_DialogClosing;
+            this.Enabled = false;
+            Draw();
+        }
+
+        private void Rename_DialogClosing(object sender, FormClosingEventArgs e)
+        {
+            string Filename = ((FilenameDialog)sender).Result;
+            int index = lvDrawer.SelectedIndices[0];
+            nItem activated = CurrentFiles[index];
+            activated.Name = Filename;
+            ((FilenameDialog)sender).FormClosing -= Rename_DialogClosing;
+            ((FilenameDialog)sender).Dispose();
+            this.Enabled = true;
+            this.Focus();
+            Draw();
+        }
+
+        private void copy_Click(object sender, EventArgs e)
+        {
+            int index = lvDrawer.SelectedIndices[0];
+            Buffer = CurrentFiles[index];
+            cmsBrowser.Items["paste"].Enabled = true;
+            isCut = false;
+        }
+
+        private void cut_Click(object sender, EventArgs e)
+        {
+            int index = lvDrawer.SelectedIndices[0];
+            Buffer = (nItem)CurrentFiles[index];
+            cmsBrowser.Items["paste"].Enabled = true;
+            isCut = true;
+        }
+
+        private void paste_Click(object sender, EventArgs e)
+        {
+            if (isCut)
+            {
+                isCut = false;
+                FileManager.MoveFile(Buffer, FileManager.CurrentDirectory);
+                cmsBrowser.Items["paste"].Enabled = false;
+                Buffer = null;
+
+            }
+            else
+            {
+                FileManager.CopyFile(Buffer, FileManager.CurrentDirectory);
+            }
+            Draw();
+            
+        }
+
+        private void fileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            btCreateFile.PerformClick();
+        }
+
+        private void folderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            btCreateFolder.PerformClick();
         }
     }
 }

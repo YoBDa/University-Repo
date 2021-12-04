@@ -11,7 +11,7 @@ namespace logical_fs_model.Classes
         private bool disposedValue;
 
         public Guid GUID { get; private set; }
-        public int Size { get; private set; }
+        public int Size { get; set; }
         public string Fullname 
         {
             get
@@ -31,8 +31,10 @@ namespace logical_fs_model.Classes
         public string Shortname { get { return Name; }  }
         public nDirectory Parent { get; set; }
         public string Name { get;  set; }
+        public int FirstDataCluster { get; set; }
+        public int FilerecordOffset { get; set; }
 
-        public nFile(string Name, uint Size)
+        public nFile(string Name, int Size)
         {
             this.Size = Size;
             this.Name = Name;

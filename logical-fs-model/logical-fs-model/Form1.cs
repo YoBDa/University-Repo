@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using logical_fs_model.Classes;
 using logical_fs_model.Exceptions;
+using System.IO;
+using System.Windows;
 
 namespace logical_fs_model
 {
@@ -41,6 +43,7 @@ namespace logical_fs_model
             cmsBrowser.Items["cut"].Enabled = false;
             cmsBrowser.Items["paste"].Enabled = false;
             cmsBrowser.Items["rename"].Enabled = false;
+            lvDrawer.Columns.Add("FirstDataAddress");
 
         }
         private List<nItem> OrderedList(List<nItem> original)
@@ -62,6 +65,46 @@ namespace logical_fs_model
                     return Intermediate;
 
             }
+        }
+        private void DrawFat()
+        {
+            int Clusters = FileManager.fs.ClustersCount;
+            int pixelSize = 8;
+            int countX = (int)Math.Ceiling((float)pbFat.Width / pixelSize);
+            int countY = (int)Math.Ceiling((float)Clusters / countX);
+            lbDimensions.Text = $"{countX}x{countY}";
+            Graphics gr = pbFat.CreateGraphics();
+            Brush cfree = Brushes.Green;
+            Brush cbusy = Brushes.Red;
+            Brush clast = Brushes.Black;
+
+
+            int X = 0;
+            int Y = 0;
+            int counter = 0;
+            for (int i = 0; i < countY; i++)
+            {
+                for (int j = 0; j < countX; j++)
+                {
+                    if (counter < Clusters) 
+                    {
+                        switch (FileManager.fs.fat[counter])
+                        {
+                            case 0x0: gr.FillRectangle(cfree, X, Y, pixelSize, pixelSize);
+                                break;
+                            case 0xFFFF: gr.FillRectangle(clast, X, Y, pixelSize, pixelSize);
+                                break;
+                            default: gr.FillRectangle(cbusy, X, Y, pixelSize, pixelSize);
+                                break;
+                        }
+                        counter++;
+                    }
+                    X += pixelSize;
+                }
+                X = 0;
+                Y += pixelSize;
+            }
+
         }
         private void Draw()
         {
@@ -105,8 +148,9 @@ namespace logical_fs_model
                 string[] Subitems =
                 {
                     file.Shortname,
-                    file.Size.ToString()
-                };
+                    file.Size.ToString(),
+                    (file.FirstDataCluster * FileManager.fs.ClusterSize + FileManager.fs.FirstDataClusterAddress).ToString("X")
+            };
                 if (file is nDirectory)
                     LVI = new ListViewItem(Subitems, "folder");
                 else
@@ -120,6 +164,7 @@ namespace logical_fs_model
             lbCurDir.Text = FileManager.CurrentDirectory.Fullname;
             string parent = FileManager.CurrentDirectory.Parent?.Fullname;
             lbParDir.Text = (string.IsNullOrWhiteSpace(parent)) ? "" : parent;
+            DrawFat();
         }
 
         private void btCreateFolder_Click(object sender, EventArgs e)
@@ -134,7 +179,7 @@ namespace logical_fs_model
             Random rnd = new Random((int)DateTime.Now.Ticks);
             string Filename = ((FilenameDialog)sender).Result;
             if (string.IsNullOrWhiteSpace(Filename)) return;
-            if (!FileManager.CreateFileHere(false, Filename, (uint)rnd.Next(0,1000000))) MessageBox.Show("Failed to create file.");
+            if (!FileManager.CreateFileHere(false, Filename, rnd.Next(0,1000000))) MessageBox.Show("Failed to create file.");
             ((FilenameDialog)sender).FormClosing -= File_Dialog_FormClosing;
             ((FilenameDialog)sender).Dispose();
             Draw();
@@ -278,6 +323,29 @@ namespace logical_fs_model
         private void folderToolStripMenuItem_Click(object sender, EventArgs e)
         {
             btCreateFolder.PerformClick();
+        }
+
+        private void btSaveFs_Click(object sender, EventArgs e)
+        {
+            int Count = FileManager.fs.drive.Size;
+
+            using (var writer = new BinaryWriter(File.Open("output.bin", FileMode.OpenOrCreate)))
+            {
+                for (int i = 0; i < Count; i++)
+                {
+                    writer.Write(FileManager.fs.drive[i]);
+                }
+            }
+
+        }
+
+        private void copyAddressToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (lvDrawer.SelectedIndices.Count < 1) return;
+            ListViewItem LVI = lvDrawer.SelectedItems[0];
+            if (LVI.SubItems.Count>=3)
+                Clipboard.SetText(LVI.SubItems[2].Text);
+
         }
     }
 }

@@ -50,6 +50,7 @@
     <Compile Include="Classes\FileRecord.cs" />
     <Compile Include="Classes\Filesystem.cs" />
     <Compile Include="Classes\nDirectory.cs" />
+    <Compile Include="Classes\nDrive.cs" />
     <Compile Include="Classes\nElement.cs">
       <SubType>Component</SubType>
     </Compile>

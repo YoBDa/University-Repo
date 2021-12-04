@@ -50,8 +50,15 @@ namespace logical_fs_model
             this.label2 = new System.Windows.Forms.Label();
             this.lbCurDir = new System.Windows.Forms.Label();
             this.lbParDir = new System.Windows.Forms.Label();
+            this.btSaveFs = new System.Windows.Forms.Button();
+            this.copyAddressToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pbFat = new System.Windows.Forms.PictureBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.lbDimensions = new System.Windows.Forms.Label();
+            this.btFormat = new System.Windows.Forms.Button();
             this.panDrawArea.SuspendLayout();
             this.cmsBrowser.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbFat)).BeginInit();
             this.SuspendLayout();
             // 
             // panDrawArea
@@ -71,6 +78,7 @@ namespace logical_fs_model
             this.lvDrawer.ContextMenuStrip = this.cmsBrowser;
             this.lvDrawer.FullRowSelect = true;
             this.lvDrawer.HideSelection = false;
+            this.lvDrawer.LabelEdit = true;
             this.lvDrawer.Location = new System.Drawing.Point(6, 6);
             this.lvDrawer.Name = "lvDrawer";
             this.lvDrawer.Size = new System.Drawing.Size(584, 381);
@@ -98,9 +106,10 @@ namespace logical_fs_model
             this.rename,
             this.copy,
             this.cut,
-            this.paste});
+            this.paste,
+            this.copyAddressToolStripMenuItem});
             this.cmsBrowser.Name = "cmsBrowser";
-            this.cmsBrowser.Size = new System.Drawing.Size(211, 152);
+            this.cmsBrowser.Size = new System.Drawing.Size(168, 148);
             // 
             // create
             // 
@@ -108,48 +117,48 @@ namespace logical_fs_model
             this.fileToolStripMenuItem,
             this.folderToolStripMenuItem});
             this.create.Name = "create";
-            this.create.Size = new System.Drawing.Size(210, 24);
+            this.create.Size = new System.Drawing.Size(167, 24);
             this.create.Text = "Create";
             // 
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(134, 26);
             this.fileToolStripMenuItem.Text = "File";
             this.fileToolStripMenuItem.Click += new System.EventHandler(this.fileToolStripMenuItem_Click);
             // 
             // folderToolStripMenuItem
             // 
             this.folderToolStripMenuItem.Name = "folderToolStripMenuItem";
-            this.folderToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.folderToolStripMenuItem.Size = new System.Drawing.Size(134, 26);
             this.folderToolStripMenuItem.Text = "Folder";
             this.folderToolStripMenuItem.Click += new System.EventHandler(this.folderToolStripMenuItem_Click);
             // 
             // rename
             // 
             this.rename.Name = "rename";
-            this.rename.Size = new System.Drawing.Size(210, 24);
+            this.rename.Size = new System.Drawing.Size(167, 24);
             this.rename.Text = "Rename";
             this.rename.Click += new System.EventHandler(this.rename_Click);
             // 
             // copy
             // 
             this.copy.Name = "copy";
-            this.copy.Size = new System.Drawing.Size(210, 24);
+            this.copy.Size = new System.Drawing.Size(167, 24);
             this.copy.Text = "Copy";
             this.copy.Click += new System.EventHandler(this.copy_Click);
             // 
             // cut
             // 
             this.cut.Name = "cut";
-            this.cut.Size = new System.Drawing.Size(210, 24);
+            this.cut.Size = new System.Drawing.Size(167, 24);
             this.cut.Text = "Cut";
             this.cut.Click += new System.EventHandler(this.cut_Click);
             // 
             // paste
             // 
             this.paste.Name = "paste";
-            this.paste.Size = new System.Drawing.Size(210, 24);
+            this.paste.Size = new System.Drawing.Size(167, 24);
             this.paste.Text = "Paste";
             this.paste.Click += new System.EventHandler(this.paste_Click);
             // 
@@ -228,11 +237,68 @@ namespace logical_fs_model
             this.lbParDir.TabIndex = 7;
             this.lbParDir.Text = "/";
             // 
+            // btSaveFs
+            // 
+            this.btSaveFs.Location = new System.Drawing.Point(2, 383);
+            this.btSaveFs.Name = "btSaveFs";
+            this.btSaveFs.Size = new System.Drawing.Size(187, 52);
+            this.btSaveFs.TabIndex = 8;
+            this.btSaveFs.Text = "Save FS";
+            this.btSaveFs.UseVisualStyleBackColor = true;
+            this.btSaveFs.Click += new System.EventHandler(this.btSaveFs_Click);
+            // 
+            // copyAddressToolStripMenuItem
+            // 
+            this.copyAddressToolStripMenuItem.Name = "copyAddressToolStripMenuItem";
+            this.copyAddressToolStripMenuItem.Size = new System.Drawing.Size(167, 24);
+            this.copyAddressToolStripMenuItem.Text = "Copy address";
+            this.copyAddressToolStripMenuItem.Click += new System.EventHandler(this.copyAddressToolStripMenuItem_Click);
+            // 
+            // pbFat
+            // 
+            this.pbFat.Location = new System.Drawing.Point(791, 54);
+            this.pbFat.Name = "pbFat";
+            this.pbFat.Size = new System.Drawing.Size(360, 360);
+            this.pbFat.TabIndex = 9;
+            this.pbFat.TabStop = false;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(794, 34);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(34, 17);
+            this.label3.TabIndex = 10;
+            this.label3.Text = "FAT";
+            // 
+            // lbDimensions
+            // 
+            this.lbDimensions.AutoSize = true;
+            this.lbDimensions.Location = new System.Drawing.Point(834, 34);
+            this.lbDimensions.Name = "lbDimensions";
+            this.lbDimensions.Size = new System.Drawing.Size(30, 17);
+            this.lbDimensions.TabIndex = 11;
+            this.lbDimensions.Text = "0x0";
+            // 
+            // btFormat
+            // 
+            this.btFormat.Location = new System.Drawing.Point(2, 325);
+            this.btFormat.Name = "btFormat";
+            this.btFormat.Size = new System.Drawing.Size(187, 52);
+            this.btFormat.TabIndex = 12;
+            this.btFormat.Text = "Format";
+            this.btFormat.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1164, 450);
+            this.Controls.Add(this.btFormat);
+            this.Controls.Add(this.lbDimensions);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.pbFat);
+            this.Controls.Add(this.btSaveFs);
             this.Controls.Add(this.lbParDir);
             this.Controls.Add(this.lbCurDir);
             this.Controls.Add(this.label2);
@@ -245,6 +311,7 @@ namespace logical_fs_model
             this.Text = "Form1";
             this.panDrawArea.ResumeLayout(false);
             this.cmsBrowser.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pbFat)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -272,6 +339,12 @@ namespace logical_fs_model
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem folderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem paste;
+        private System.Windows.Forms.Button btSaveFs;
+        private System.Windows.Forms.ToolStripMenuItem copyAddressToolStripMenuItem;
+        private System.Windows.Forms.PictureBox pbFat;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lbDimensions;
+        private System.Windows.Forms.Button btFormat;
     }
 }
 

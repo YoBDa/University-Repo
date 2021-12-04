@@ -12,7 +12,9 @@ namespace logical_fs_model.Classes
     public interface nItem : IDisposable, ICloneable
     {
         Guid GUID { get; }
-        int Size { get; }
+        int Size { get; set; }
+        int FirstDataCluster { get; set; }
+        int FilerecordOffset { get; set; }
         string Fullname { get; }
         string Shortname{ get; }
         string Name { get; set; }

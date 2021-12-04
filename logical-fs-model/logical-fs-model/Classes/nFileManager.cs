@@ -10,10 +10,14 @@ namespace logical_fs_model.Classes
     public class nFileManager
     {
         private static readonly string ForbiddenFilenameCharacters = "/\\:*+?<>\"";
-        public nFileManager()
+        public Filesystem fs;
+        public nFileManager(int ClustersCount = 128, int ClusterSize = 1024)
         {
             nDirectory root = new nDirectory("");
+            
             CurrentDirectory = root;
+            root.FirstDataCluster = 0;
+            fs = new Filesystem(ClustersCount, ClusterSize);
         }
         
         public nDirectory CurrentDirectory { get; set; }
@@ -34,20 +38,28 @@ namespace logical_fs_model.Classes
             else return true;
         }
 
-        public bool CreateFileHere(bool IsDirectory, string Filename, uint Size=0)
+        public bool CreateFileHere(bool IsDirectory, string Filename, int Size=0)
         {
             return CreateFile(IsDirectory, CurrentDirectory, Filename, Size);
         }
-        public bool CreateFile(bool IsDirectory, nDirectory Directory, string Filename, uint Size=0)
+        public bool CreateFile(bool IsDirectory, nDirectory Directory, string Filename, int Size=0)
         {
             try
             {
+                nItem file;
                 if (!CheckFilename(Filename)) return false;
                 if (IsDirectory)
-                    Directory.AppendChild(new nDirectory(Filename) { Parent = Directory});
+                {
+                    file = new nDirectory(Filename) { Parent = Directory };
+                    
+                }
                 else
-                    Directory.AppendChild(new nFile(Filename, Size) { Parent = Directory });
-                return true;
+                {
+                    file = new nFile(Filename, Size) { Parent = Directory };
+                }
+
+                Directory.AppendChild(file);
+                return fs.CreateFile(file, file.Parent.FirstDataCluster);
             }
             catch
             {
@@ -107,6 +119,7 @@ namespace logical_fs_model.Classes
 
             try
             {
+                fs.RemoveFile(file);
                 file.Parent.RemoveChild(file);
                 file.Dispose();
                 return true;

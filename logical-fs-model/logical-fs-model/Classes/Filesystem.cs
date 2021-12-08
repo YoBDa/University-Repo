@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace logical_fs_model.Classes
 {
 
-    
+
     public struct Fat
     {
         private int[] Clusters;
@@ -41,7 +41,7 @@ namespace logical_fs_model.Classes
             {
                 if (Clusters[index] == 0x0) return index;
             }
-            return 0;
+            throw new Exception("Lack of free memory.");
         }
         public int GetFreeCount()
         {
@@ -68,6 +68,7 @@ namespace logical_fs_model.Classes
             }
             MarkAsFree(index);
         }
+        
     }
 
     //agree that:
@@ -93,7 +94,7 @@ namespace logical_fs_model.Classes
 
             fatSize = fatPointerSize * ClustersCount;
             FirstDataClusterAddress = fatSize + fatOffset;
-            int DriveSize = 16 + fatSize + (ClusterSize * ClustersCount);
+            int DriveSize = fatOffset + fatSize + (ClusterSize * ClustersCount);
             drive = new nDrive(DriveSize);
             //writing fat to drive
             byte[] FatSizeArray = BitConverter.GetBytes(fatSize);
@@ -101,13 +102,13 @@ namespace logical_fs_model.Classes
             {
                 drive[i] = FatSizeArray[i];
             }
-            fat = new Fat(fatSize/4);
+            fat = new Fat(fatSize / 4);
 
-            for (int i = 0; i < ClusterSize; i+=32)
+            for (int i = 0; i < ClusterSize; i += 32)
             {
 
                 int addr = FirstDataClusterAddress + i;
-                drive[addr] = 0xE5;                
+                drive[addr] = 0xE5;
             }
             fat.MarkAsLast(0);
 
@@ -115,10 +116,19 @@ namespace logical_fs_model.Classes
 
 
 
-           
-            //FileRecord fr = new FileRecord("", FirstDataClusterAddress, 0, 1);
-            
 
+            //FileRecord fr = new FileRecord("", FirstDataClusterAddress, 0, 1);
+
+
+        }
+        public void FillDirectoryCluster(int index)
+        {
+            for (int i = 0; i < ClusterSize; i += 32)
+            {
+
+                int addr = FirstDataClusterAddress + (ClusterSize * index) + i;
+                drive[addr] = 0xE5;
+            }
         }
 
         private void WriteFat()
@@ -133,7 +143,7 @@ namespace logical_fs_model.Classes
                     drive[counter + fatOffset] = cluster[j];
                     counter++;
                 }
-                
+
             }
         }
 
@@ -153,7 +163,7 @@ namespace logical_fs_model.Classes
             }
         }
         public int ClusterSize { get; }
-        
+
         public int ClustersCount { get; }
 
         public int TotalSpace { get => ClustersCount * ClusterSize; }
@@ -161,94 +171,130 @@ namespace logical_fs_model.Classes
         private int FreeClusters { get => fat.GetFreeCount(); }
 
         public int AddFileRecord(FileRecord fl, int DirectoryIndex = 0)
+        {
+
+            try
             {
-            
-            while (!fat.IsLast(DirectoryIndex))
-            {
-                DirectoryIndex = fat[DirectoryIndex];
-            }
-            int offset = 0;
-            while (drive[FirstDataClusterAddress + ClusterSize * (DirectoryIndex) + offset] != 0xE5)
-            {
-                if (offset < ClusterSize)
-                    offset += 32;
-                else
+                //search for last directory cluster
+                while (!fat.IsLast(DirectoryIndex))
                 {
-                    int index = fat.GetFirstFree();
-                    fat.MarkAsBusy(DirectoryIndex, index);
-                    fat.MarkAsLast(index);
-                    DirectoryIndex = index;
-                    offset = 0;
+                    DirectoryIndex = fat[DirectoryIndex];
                 }
+
+                //search for last filerecord in directory data
+                int offset = 0;
+
+                while (drive[FirstDataClusterAddress + ClusterSize * (DirectoryIndex) + offset] != 0xE5)
+                {
+                    if (offset < ClusterSize)
+                        offset += 32;
+                    else
+                    {
+
+                        int index = fat.GetFirstFree();
+
+
+                        fat.MarkAsBusy(DirectoryIndex, index);
+                        fat.MarkAsLast(index);
+                        FillDirectoryCluster(index);
+                        DirectoryIndex = index;
+                    }
+                }
+                byte[] recBytes = fl.Serialize();
+                for (int i = 0; i < 32; i++)
+                {
+                    drive[FirstDataClusterAddress + ClusterSize * (DirectoryIndex) + (offset - offset/ClusterSize) + i] = recBytes[i];
+                }
+                WriteFat();
+
+                return offset / 32;
             }
-            byte[] recBytes = fl.Serialize();
-            for (int i = 0; i < 32; i++)
+            catch
             {
-                drive[FirstDataClusterAddress + ClusterSize * (DirectoryIndex) + offset + i] = recBytes[i];
+                //ReadFat();
+                return -1;
             }
-            return offset / 32;
+        }
+        public int EditFileRecord(int DirectoryIndex)
+        {
+            throw new Exception();
+            
         }
 
         public bool CreateFile(nItem file, int inDirectory)
         {
-            
-            int index = fat.GetFirstFree();
-            int fdc = index;
-            
-            if (file is nFile)
+            try
             {
-                string test = $"Filesystem integrity check. This file has name {file.Name}";
-                byte[] bytes = Encoding.ASCII.GetBytes(test);
-                List<byte> data = new List<byte>();
-                data.AddRange(bytes);
-                data.AddRange((new byte[ClusterSize * 4]));
-                data.AddRange(bytes);
-                
-                file.Size = data.Count;
-                FileRecord record = new FileRecord(file.Name, fdc, file.Size, 0);
-                
-                int clustersNeed = (int)Math.Ceiling((float)file.Size / ClusterSize);
-                if (FreeClusters < clustersNeed) return false;
-                
+                int index = fat.GetFirstFree();
+                int fdc = index;
 
-                int counter = 0;
-                for (int i = 0; i < clustersNeed; i++)
+                if (file is nFile)
                 {
-                    for (int j = 0; j < ClusterSize; j++)
+                    string test = $"Filesystem integrity check. This file has name {file.Name}";
+                    byte[] bytes = Encoding.ASCII.GetBytes(test);
+                    List<byte> data = new List<byte>();
+                    data.AddRange(bytes);
+                    data.AddRange((new byte[ClusterSize * 4]));
+                    data.AddRange(bytes);
+
+                    file.Size = data.Count;
+                    FileRecord record = new FileRecord(file.Name, fdc, file.Size, 0);
+
+                    int clustersNeed = (int)Math.Ceiling((float)file.Size / ClusterSize);
+                    if (FreeClusters < clustersNeed) return false;
+
+
+                    int counter = 0;
+                    for (int i = 0; i < clustersNeed; i++)
                     {
-                        if (counter >= data.Count) break;
-                        int addr = FirstDataClusterAddress + ClusterSize * index + j;
-                        drive[addr] = data[counter];
-                        counter++;
+                        for (int j = 0; j < ClusterSize; j++)
+                        {
+                            if (counter >= data.Count) break;
+                            int addr = FirstDataClusterAddress + ClusterSize * index + j;
+                            drive[addr] = data[counter];
+                            counter++;
+                        }
+
+
+                        int prevIndex = index;
+                        index = fat.GetFirstFree();
+                        fat.MarkAsBusy(prevIndex, index);
+                        fat.MarkAsLast(index);
                     }
-
-                    if (counter >= data.Count) { fat.MarkAsLast(index); break; }
-                    fat.MarkAsLast(index);
-                    int prevIndex = index;
-                    index = fat.GetFirstFree();
-                    fat.MarkAsBusy(prevIndex, index);
+                    int offset = AddFileRecord(record, inDirectory);
+                    if (offset == -1)
+                    {
+                        //ReadFat();
+                        return false;
+                    }
+                    file.FilerecordOffset = offset;
                 }
-                file.FilerecordOffset = AddFileRecord(record, inDirectory);
-            }
-            else
-            {
-                FileRecord record = new FileRecord(file.Name, fdc, file.Size, 1);
-                int clustersNeed = 1;
-                if (FreeClusters < clustersNeed) return false;
-                for (int i = 0; i < ClusterSize; i+=32)
+                else
                 {
-
-                    int addr = FirstDataClusterAddress + (ClusterSize * index) + i;
-                    drive[addr] = 0xE5;
+                    FileRecord record = new FileRecord(file.Name, fdc, file.Size, 1);
+                    int clustersNeed = 1;
+                    if (FreeClusters < clustersNeed) return false;
+                    FillDirectoryCluster(index);
+                    fat.MarkAsLast(index);
+                    int offset = AddFileRecord(record, inDirectory);
+                    if (offset == -1)
+                    {
+                        //ReadFat();
+                        return false;
+                    }
+                    file.FilerecordOffset = offset;
                 }
-                fat.MarkAsLast(index);
-                file.FilerecordOffset = AddFileRecord(record, inDirectory);
+                file.FirstDataCluster = fdc;
+                WriteFat();
+                return true;
             }
-            file.FirstDataCluster = fdc;
-            WriteFat();
-            return true;
-            
-           
+            catch (Exception)
+            {
+                //ReadFat();
+                return false;
+            }
+
+
 
 
         }
@@ -260,10 +306,15 @@ namespace logical_fs_model.Classes
             int FilerecordAddr = FirstDataClusterAddress + file.Parent.FirstDataCluster * ClusterSize + file.FilerecordOffset;
             drive[FilerecordAddr] = 0xE5;
             return true;
-            
+
+        }
+
+        public bool MoveFile(nItem file, int WhereIndex)
+        {
+            file.
         }
 
     }
 
-    
+
 }

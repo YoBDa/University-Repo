@@ -58,8 +58,17 @@ namespace logical_fs_model.Classes
                     file = new nFile(Filename, Size) { Parent = Directory };
                 }
 
-                Directory.AppendChild(file);
-                return fs.CreateFile(file, file.Parent.FirstDataCluster);
+
+                if (fs.CreateFile(file, file.Parent.FirstDataCluster))
+                {
+                    Directory.AppendChild(file);
+                    return true;
+                }
+                else
+                {
+                    file.Dispose();
+                    return false;
+                }
             }
             catch
             {

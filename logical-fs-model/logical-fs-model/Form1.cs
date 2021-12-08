@@ -22,9 +22,9 @@ namespace logical_fs_model
         private List<nItem> CurrentFiles;
         private nItem Buffer;
         private bool isCut = false;
+        private Bitmap bmp;
         public Form1()
         {
-            FileManager = new nFileManager();
             CurrentFiles = new List<nItem>();
             InitializeComponent();
             ImageList il = new ImageList();
@@ -44,6 +44,7 @@ namespace logical_fs_model
             cmsBrowser.Items["paste"].Enabled = false;
             cmsBrowser.Items["rename"].Enabled = false;
             lvDrawer.Columns.Add("FirstDataAddress");
+            bmp = new Bitmap(pbFat.Width, pbFat.Height) ;
 
         }
         private List<nItem> OrderedList(List<nItem> original)
@@ -68,12 +69,20 @@ namespace logical_fs_model
         }
         private void DrawFat()
         {
+
             int Clusters = FileManager.fs.ClustersCount;
+            int ClusterSize = FileManager.fs.ClusterSize;
+            int SpaceFree = FileManager.fs.FreeSpace;
+            int TotalSpace = Clusters * ClusterSize;
+            int SpaceUsed = TotalSpace - SpaceFree;
             int pixelSize = 8;
             int countX = (int)Math.Ceiling((float)pbFat.Width / pixelSize);
             int countY = (int)Math.Ceiling((float)Clusters / countX);
-            lbDimensions.Text = $"{countX}x{countY}";
-            Graphics gr = pbFat.CreateGraphics();
+            lbDimensions.Text = $"{Clusters} clusters x {ClusterSize/1024} KB = {Clusters*ClusterSize/1024} KB";
+            lbSpace.Text = $"Space {SpaceFree}/{TotalSpace} [free]";
+            pbrSpace.Value = SpaceUsed / TotalSpace;
+            Graphics gr = Graphics.FromImage(bmp);
+            gr.Clear(SystemColors.Control);
             Brush cfree = Brushes.Green;
             Brush cbusy = Brushes.Red;
             Brush clast = Brushes.Black;
@@ -104,7 +113,7 @@ namespace logical_fs_model
                 X = 0;
                 Y += pixelSize;
             }
-
+            pbFat.Image = bmp;
         }
         private void Draw()
         {
@@ -129,6 +138,7 @@ namespace logical_fs_model
 
             lvDrawer.Items.Clear();
             CurrentFiles.Clear();
+            if (FileManager == null) return;
             ListViewItem LVI;
             if (FileManager.CurrentDirectory.Fullname != "/")
             {
@@ -346,6 +356,14 @@ namespace logical_fs_model
             if (LVI.SubItems.Count>=3)
                 Clipboard.SetText(LVI.SubItems[2].Text);
 
+        }
+
+        private void btFormat_Click(object sender, EventArgs e)
+        {
+            int ClustersCount = (int)nudClustersCount.Value;
+            int ClusterSize = (int)Math.Pow(2, (int)nudClusterSize.Value)*1024;
+            FileManager = new nFileManager(ClustersCount, ClusterSize);
+            Draw();
         }
     }
 }

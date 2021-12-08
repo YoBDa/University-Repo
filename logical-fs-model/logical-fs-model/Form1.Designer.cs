@@ -56,9 +56,18 @@ namespace logical_fs_model
             this.label3 = new System.Windows.Forms.Label();
             this.lbDimensions = new System.Windows.Forms.Label();
             this.btFormat = new System.Windows.Forms.Button();
+            this.nudClusterSize = new System.Windows.Forms.NumericUpDown();
+            this.nudClustersCount = new System.Windows.Forms.NumericUpDown();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.pbrSpace = new System.Windows.Forms.ProgressBar();
+            this.lbSpace = new System.Windows.Forms.Label();
             this.panDrawArea.SuspendLayout();
             this.cmsBrowser.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbFat)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudClusterSize)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudClustersCount)).BeginInit();
             this.SuspendLayout();
             // 
             // panDrawArea
@@ -258,7 +267,7 @@ namespace logical_fs_model
             // 
             this.pbFat.Location = new System.Drawing.Point(791, 54);
             this.pbFat.Name = "pbFat";
-            this.pbFat.Size = new System.Drawing.Size(360, 360);
+            this.pbFat.Size = new System.Drawing.Size(360, 300);
             this.pbFat.TabIndex = 9;
             this.pbFat.TabStop = false;
             // 
@@ -276,9 +285,9 @@ namespace logical_fs_model
             this.lbDimensions.AutoSize = true;
             this.lbDimensions.Location = new System.Drawing.Point(834, 34);
             this.lbDimensions.Name = "lbDimensions";
-            this.lbDimensions.Size = new System.Drawing.Size(30, 17);
+            this.lbDimensions.Size = new System.Drawing.Size(159, 17);
             this.lbDimensions.TabIndex = 11;
-            this.lbDimensions.Text = "0x0";
+            this.lbDimensions.Text = "0 clusters x 0 KB = 0 KB";
             // 
             // btFormat
             // 
@@ -288,12 +297,103 @@ namespace logical_fs_model
             this.btFormat.TabIndex = 12;
             this.btFormat.Text = "Format";
             this.btFormat.UseVisualStyleBackColor = true;
+            this.btFormat.Click += new System.EventHandler(this.btFormat_Click);
+            // 
+            // nudClusterSize
+            // 
+            this.nudClusterSize.Location = new System.Drawing.Point(2, 297);
+            this.nudClusterSize.Maximum = new decimal(new int[] {
+            6,
+            0,
+            0,
+            0});
+            this.nudClusterSize.Name = "nudClusterSize";
+            this.nudClusterSize.Size = new System.Drawing.Size(90, 22);
+            this.nudClusterSize.TabIndex = 13;
+            this.nudClusterSize.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // nudClustersCount
+            // 
+            this.nudClustersCount.Location = new System.Drawing.Point(98, 297);
+            this.nudClustersCount.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nudClustersCount.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.nudClustersCount.Name = "nudClustersCount";
+            this.nudClustersCount.Size = new System.Drawing.Size(90, 22);
+            this.nudClustersCount.TabIndex = 14;
+            this.nudClustersCount.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(-1, 277);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(94, 17);
+            this.label4.TabIndex = 15;
+            this.label4.Text = "Size (2^n KB)";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(95, 277);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(45, 17);
+            this.label5.TabIndex = 16;
+            this.label5.Text = "Count";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(-1, 249);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(131, 17);
+            this.label6.TabIndex = 17;
+            this.label6.Text = "Clusters properties:";
+            // 
+            // pbrSpace
+            // 
+            this.pbrSpace.Location = new System.Drawing.Point(797, 360);
+            this.pbrSpace.Name = "pbrSpace";
+            this.pbrSpace.Size = new System.Drawing.Size(354, 52);
+            this.pbrSpace.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.pbrSpace.TabIndex = 18;
+            // 
+            // lbSpace
+            // 
+            this.lbSpace.AutoSize = true;
+            this.lbSpace.Location = new System.Drawing.Point(794, 415);
+            this.lbSpace.Name = "lbSpace";
+            this.lbSpace.Size = new System.Drawing.Size(109, 17);
+            this.lbSpace.TabIndex = 19;
+            this.lbSpace.Text = "Space 0/0 [free]";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1164, 450);
+            this.Controls.Add(this.lbSpace);
+            this.Controls.Add(this.pbrSpace);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.nudClustersCount);
+            this.Controls.Add(this.nudClusterSize);
             this.Controls.Add(this.btFormat);
             this.Controls.Add(this.lbDimensions);
             this.Controls.Add(this.label3);
@@ -312,6 +412,8 @@ namespace logical_fs_model
             this.panDrawArea.ResumeLayout(false);
             this.cmsBrowser.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbFat)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudClusterSize)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudClustersCount)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -345,6 +447,13 @@ namespace logical_fs_model
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label lbDimensions;
         private System.Windows.Forms.Button btFormat;
+        private System.Windows.Forms.NumericUpDown nudClusterSize;
+        private System.Windows.Forms.NumericUpDown nudClustersCount;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ProgressBar pbrSpace;
+        private System.Windows.Forms.Label lbSpace;
     }
 }
 

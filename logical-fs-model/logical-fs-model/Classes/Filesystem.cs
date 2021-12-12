@@ -234,7 +234,7 @@ namespace logical_fs_model.Classes
                     byte[] bytes = Encoding.ASCII.GetBytes(test);
                     List<byte> data = new List<byte>();
                     data.AddRange(bytes);
-                    data.AddRange((new byte[ClusterSize * 4]));
+                    data.AddRange((new byte[ClusterSize * new Random().Next(1,5)]));
                     data.AddRange(bytes);
 
                     file.Size = data.Count;
@@ -298,6 +298,31 @@ namespace logical_fs_model.Classes
 
 
         }
+        public bool DefragmentFile(nItem file)
+        {
+            byte cache = 0;
+            int indexCache = 0;
+            int index = file.FirstDataCluster;
+            while (fat[index] != 0xFFFF)
+            {
+                int nextIndex = fat[index];
+                if (Math.Abs(nextIndex-index) > 1)
+                {
+                    for (int i = 0; i < ClusterSize; i++)
+                    {
+                        int newaddr = FirstDataClusterAddress + ClusterSize * nextIndex + i;
+                        int oldaddr = FirstDataClusterAddress + ClusterSize * index + i;
+                        cache = drive[newaddr];
+                        drive[newaddr] = drive[oldaddr];
+                        drive[oldaddr] = cache;
+                        indexCache = fat[nextIndex];
+                        fat[nextIndex] = fat[index];
+
+                    }
+                } 
+            }
+            
+        }
 
         public bool RemoveFile(nItem file)
         {
@@ -311,7 +336,16 @@ namespace logical_fs_model.Classes
 
         public bool MoveFile(nItem file, int WhereIndex)
         {
-            file.
+            int FilerecordAddr = FirstDataClusterAddress + file.Parent.FirstDataCluster * ClusterSize + file.FilerecordOffset;
+            drive[FilerecordAddr] = 0xE5;
+            byte isDirectory = (byte)((file is nDirectory) ? 1 : 0);
+            FileRecord fr = new FileRecord(file.Name, file.FirstDataCluster, file.Size, isDirectory);
+            int offset = AddFileRecord(fr, WhereIndex);
+            if (offset == -1) return false;
+            file.FilerecordOffset = offset;
+            return true;
+            
+
         }
 
     }

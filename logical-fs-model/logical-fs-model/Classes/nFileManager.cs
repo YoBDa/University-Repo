@@ -84,6 +84,7 @@ namespace logical_fs_model.Classes
             try
             {
                 newFile.Name = withName;
+                if (!fs.CreateFile(newFile, toDirectory.FirstDataCluster)) return false;
                 toDirectory.AppendChild(newFile);
                 newFile.Parent = toDirectory;
                 return true;
@@ -104,6 +105,7 @@ namespace logical_fs_model.Classes
             if (!CheckFilename(withName)) return false;
             try
             {
+                if (!fs.MoveFile(file, toDirectory.FirstDataCluster)) return false;
                 oldParent.RemoveChild(file);
                 file.Name = withName;
                 toDirectory.AppendChild(file);
@@ -126,9 +128,17 @@ namespace logical_fs_model.Classes
         public bool DeleteFile(nItem file)
         {
 
+            int isDir = (file is nDirectory) ? 1 : 0;
             try
             {
-                fs.RemoveFile(file);
+                if (isDir == 1)
+                {
+                    foreach (nItem item in ((nDirectory)file).Child)
+                    {
+                        DeleteFile(item);
+                    }
+                }
+                if (!fs.RemoveFile(file)) return false;
                 file.Parent.RemoveChild(file);
                 file.Dispose();
                 return true;

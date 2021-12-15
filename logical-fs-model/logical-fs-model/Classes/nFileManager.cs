@@ -11,12 +11,13 @@ namespace logical_fs_model.Classes
     {
         private static readonly string ForbiddenFilenameCharacters = "/\\:*+?<>\"";
         public Filesystem fs;
+        private nDirectory Root;
         public nFileManager(int ClustersCount = 128, int ClusterSize = 1024)
         {
-            nDirectory root = new nDirectory("");
+            Root = new nDirectory("");
             
-            CurrentDirectory = root;
-            root.FirstDataCluster = 0;
+            CurrentDirectory = Root;
+            Root.FirstDataCluster = 0;
             fs = new Filesystem(ClustersCount, ClusterSize);
         }
         
@@ -153,6 +154,29 @@ namespace logical_fs_model.Classes
         public bool RenameFile(nItem file, string newName)
         {
             return MoveFile(file, file.Parent, newName);
+        }
+
+        public List<nItem> GetAllFiles(nDirectory Where)
+        {
+            List<nItem> items = new List<nItem>();
+            foreach (var item in Where.Child)
+            {
+                items.Add(item);
+                if (item is nDirectory)
+                {
+                    items.AddRange(GetAllFiles((nDirectory)item));
+                }
+            }
+            return items;
+        }
+        public bool DefragmentAll()
+        {
+            foreach (var item in GetAllFiles(Root))
+            {
+                var ListOfCLusters = fs.GetAllClusters(item);
+            }
+
+            return false;
         }
       
         

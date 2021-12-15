@@ -298,6 +298,19 @@ namespace logical_fs_model.Classes
 
 
         }
+        public List<int> GetAllClusters(nItem file)
+        {
+            int index = file.FirstDataCluster;
+            List<int> Clusters = new List<int>();
+            Clusters.Add(index);
+            while (fat[index] != 0xFFFF)
+            {
+                index = fat[index];
+                Clusters.Add(index);
+            }
+            return Clusters;
+        }
+
         public bool DefragmentFile(nItem file)
         {
             byte cache = 0;
@@ -321,6 +334,7 @@ namespace logical_fs_model.Classes
                     }
                 } 
             }
+            return false;
             
         }
 

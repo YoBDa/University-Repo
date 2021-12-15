@@ -80,7 +80,7 @@ namespace logical_fs_model
             int countY = (int)Math.Ceiling((float)Clusters / countX);
             lbDimensions.Text = $"{Clusters} clusters x {ClusterSize/1024} KB = {Clusters*ClusterSize/1024} KB";
             lbSpace.Text = $"Space {SpaceFree}/{TotalSpace} [free]";
-            pbrSpace.Value = SpaceUsed / TotalSpace;
+            pbrSpace.Value = SpaceUsed;
             Graphics gr = Graphics.FromImage(bmp);
             gr.Clear(SystemColors.Control);
             Brush cfree = Brushes.Green;
@@ -363,6 +363,7 @@ namespace logical_fs_model
             int ClustersCount = (int)nudClustersCount.Value;
             int ClusterSize = (int)Math.Pow(2, (int)nudClusterSize.Value)*1024;
             FileManager = new nFileManager(ClustersCount, ClusterSize);
+            pbrSpace.Maximum = FileManager.fs.TotalSpace;
             Draw();
         }
     }

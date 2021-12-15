@@ -15,7 +15,7 @@ namespace planirovshik
 {
     public partial class Form1 : Form
     {
-        int ExecSpeed = 1; //tick per sercond
+        int ExecSpeed = 3; //tick per sercond
         long TicksCount = 0;
         bool State = false; // false - stopped, true - started
         System.Timers.Timer T;
@@ -43,9 +43,15 @@ namespace planirovshik
 
         private void T_Tick(object sender, EventArgs e)
         {
+            
             ProcessManager.Tick();
             TicksCount++;
             Draw();
+            if (ProcessManager.Processes.Count == 0) 
+                if (btStartStop.InvokeRequired)
+                    btStartStop.Invoke(new MethodInvoker(delegate { btStartStop.PerformClick(); }));
+
+
         }
         private void Draw()
         {
@@ -69,6 +75,21 @@ namespace planirovshik
                 LVI.Selected = pr.State == ProcessState.Active;
                 ProcList.Add(LVI);
             }
+
+            if (pbRam.InvokeRequired)
+            {
+                pbRam.Invoke(new MethodInvoker(delegate { pbRam.Value = (int)((1 - ProcessManager.FreeRAM) * 100); }));
+
+            }
+            else
+                pbRam.Value = (int)((1 - ProcessManager.FreeRAM) * 100);
+
+            if (pbVram.InvokeRequired)
+                pbVram.Invoke(new MethodInvoker(delegate { pbVram.Value = (int)((1 - ProcessManager.FreeVRAM) * 100); }));
+            else
+                pbVram.Value = (int)((1 - ProcessManager.FreeVRAM) * 100);
+
+
             if (labTicks.InvokeRequired) labTicks.Invoke(new MethodInvoker(delegate { labTicks.Text = TicksCount.ToString(); }));
             if (lvProcesses.InvokeRequired)
             {
@@ -87,6 +108,7 @@ namespace planirovshik
         {
             
             ProcessManager.AddProcess(Name, Priority, rnd.Next(1, 50));
+            Draw();
         }
 
         private void btStartStop_Click(object sender, EventArgs e)

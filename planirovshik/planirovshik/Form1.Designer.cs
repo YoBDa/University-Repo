@@ -31,6 +31,8 @@ namespace planirovshik
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tpExecute = new System.Windows.Forms.TabPage();
+            this.label5 = new System.Windows.Forms.Label();
+            this.tbSpeed = new System.Windows.Forms.TrackBar();
             this.label4 = new System.Windows.Forms.Label();
             this.cbSchedulers = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -57,14 +59,16 @@ namespace planirovshik
             this.tpRemoveProcess = new System.Windows.Forms.TabPage();
             this.btRemove = new System.Windows.Forms.Button();
             this.lbProcesses = new System.Windows.Forms.ListBox();
-            this.tbSpeed = new System.Windows.Forms.TrackBar();
-            this.label5 = new System.Windows.Forms.Label();
+            this.pbRam = new System.Windows.Forms.ProgressBar();
+            this.pbVram = new System.Windows.Forms.ProgressBar();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tpExecute.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tbSpeed)).BeginInit();
             this.tpAddProcess.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudPriority)).BeginInit();
             this.tpRemoveProcess.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tbSpeed)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -72,10 +76,11 @@ namespace planirovshik
             this.tabControl1.Controls.Add(this.tpExecute);
             this.tabControl1.Controls.Add(this.tpAddProcess);
             this.tabControl1.Controls.Add(this.tpRemoveProcess);
-            this.tabControl1.Location = new System.Drawing.Point(12, 12);
+            this.tabControl1.Location = new System.Drawing.Point(9, 10);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(776, 426);
+            this.tabControl1.Size = new System.Drawing.Size(582, 346);
             this.tabControl1.TabIndex = 0;
             // 
             // tpExecute
@@ -91,46 +96,76 @@ namespace planirovshik
             this.tpExecute.Controls.Add(this.lvProcesses);
             this.tpExecute.Controls.Add(this.lbHeader);
             this.tpExecute.Controls.Add(this.btStartStop);
-            this.tpExecute.Location = new System.Drawing.Point(4, 25);
+            this.tpExecute.Location = new System.Drawing.Point(4, 22);
+            this.tpExecute.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tpExecute.Name = "tpExecute";
-            this.tpExecute.Padding = new System.Windows.Forms.Padding(3);
-            this.tpExecute.Size = new System.Drawing.Size(768, 397);
+            this.tpExecute.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tpExecute.Size = new System.Drawing.Size(574, 320);
             this.tpExecute.TabIndex = 0;
             this.tpExecute.Text = "Execute";
             this.tpExecute.UseVisualStyleBackColor = true;
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(473, 125);
+            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(43, 15);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "Speed";
+            // 
+            // tbSpeed
+            // 
+            this.tbSpeed.LargeChange = 10;
+            this.tbSpeed.Location = new System.Drawing.Point(472, 144);
+            this.tbSpeed.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tbSpeed.Maximum = 30;
+            this.tbSpeed.Minimum = 1;
+            this.tbSpeed.Name = "tbSpeed";
+            this.tbSpeed.Size = new System.Drawing.Size(99, 56);
+            this.tbSpeed.SmallChange = 5;
+            this.tbSpeed.TabIndex = 10;
+            this.tbSpeed.TickFrequency = 5;
+            this.tbSpeed.Value = 1;
+            this.tbSpeed.Scroll += new System.EventHandler(this.tbSpeed_Scroll);
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(630, 84);
+            this.label4.Location = new System.Drawing.Point(472, 68);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(115, 17);
+            this.label4.Size = new System.Drawing.Size(100, 15);
             this.label4.TabIndex = 9;
             this.label4.Text = "Select Scheduler";
             // 
             // cbSchedulers
             // 
             this.cbSchedulers.FormattingEnabled = true;
-            this.cbSchedulers.Location = new System.Drawing.Point(630, 104);
+            this.cbSchedulers.Location = new System.Drawing.Point(472, 84);
+            this.cbSchedulers.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cbSchedulers.Name = "cbSchedulers";
-            this.cbSchedulers.Size = new System.Drawing.Size(129, 24);
+            this.cbSchedulers.Size = new System.Drawing.Size(98, 21);
             this.cbSchedulers.TabIndex = 8;
             this.cbSchedulers.SelectedIndexChanged += new System.EventHandler(this.cbSchedulers_SelectedIndexChanged);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(630, 6);
+            this.label3.Location = new System.Drawing.Point(472, 5);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(45, 17);
+            this.label3.Size = new System.Drawing.Size(38, 15);
             this.label3.TabIndex = 7;
             this.label3.Text = "Ticks:";
             // 
             // btInit
             // 
-            this.btInit.Location = new System.Drawing.Point(690, 310);
+            this.btInit.Location = new System.Drawing.Point(518, 252);
+            this.btInit.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btInit.Name = "btInit";
-            this.btInit.Size = new System.Drawing.Size(75, 23);
+            this.btInit.Size = new System.Drawing.Size(56, 19);
             this.btInit.TabIndex = 6;
             this.btInit.Text = "Init";
             this.btInit.UseVisualStyleBackColor = true;
@@ -138,9 +173,10 @@ namespace planirovshik
             // 
             // btReset
             // 
-            this.btReset.Location = new System.Drawing.Point(690, 339);
+            this.btReset.Location = new System.Drawing.Point(518, 275);
+            this.btReset.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btReset.Name = "btReset";
-            this.btReset.Size = new System.Drawing.Size(75, 23);
+            this.btReset.Size = new System.Drawing.Size(56, 19);
             this.btReset.TabIndex = 5;
             this.btReset.Text = "Reset";
             this.btReset.UseVisualStyleBackColor = true;
@@ -149,9 +185,10 @@ namespace planirovshik
             // labTicks
             // 
             this.labTicks.AutoSize = true;
-            this.labTicks.Location = new System.Drawing.Point(630, 27);
+            this.labTicks.Location = new System.Drawing.Point(472, 22);
+            this.labTicks.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labTicks.Name = "labTicks";
-            this.labTicks.Size = new System.Drawing.Size(16, 17);
+            this.labTicks.Size = new System.Drawing.Size(14, 15);
             this.labTicks.TabIndex = 4;
             this.labTicks.Text = "0";
             // 
@@ -170,11 +207,12 @@ namespace planirovshik
             this.lvProcesses.FullRowSelect = true;
             this.lvProcesses.HideSelection = false;
             this.lvProcesses.LabelWrap = false;
-            this.lvProcesses.Location = new System.Drawing.Point(9, 6);
+            this.lvProcesses.Location = new System.Drawing.Point(7, 5);
+            this.lvProcesses.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lvProcesses.MultiSelect = false;
             this.lvProcesses.Name = "lvProcesses";
             this.lvProcesses.ShowGroups = false;
-            this.lvProcesses.Size = new System.Drawing.Size(615, 385);
+            this.lvProcesses.Size = new System.Drawing.Size(462, 314);
             this.lvProcesses.TabIndex = 3;
             this.lvProcesses.UseCompatibleStateImageBehavior = false;
             this.lvProcesses.View = System.Windows.Forms.View.Details;
@@ -220,16 +258,18 @@ namespace planirovshik
             // lbHeader
             // 
             this.lbHeader.AutoSize = true;
-            this.lbHeader.Location = new System.Drawing.Point(6, 6);
+            this.lbHeader.Location = new System.Drawing.Point(4, 5);
+            this.lbHeader.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbHeader.Name = "lbHeader";
-            this.lbHeader.Size = new System.Drawing.Size(0, 17);
+            this.lbHeader.Size = new System.Drawing.Size(0, 15);
             this.lbHeader.TabIndex = 2;
             // 
             // btStartStop
             // 
-            this.btStartStop.Location = new System.Drawing.Point(690, 368);
+            this.btStartStop.Location = new System.Drawing.Point(518, 299);
+            this.btStartStop.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btStartStop.Name = "btStartStop";
-            this.btStartStop.Size = new System.Drawing.Size(75, 23);
+            this.btStartStop.Size = new System.Drawing.Size(56, 19);
             this.btStartStop.TabIndex = 0;
             this.btStartStop.Text = "Start";
             this.btStartStop.UseVisualStyleBackColor = true;
@@ -242,10 +282,11 @@ namespace planirovshik
             this.tpAddProcess.Controls.Add(this.nudPriority);
             this.tpAddProcess.Controls.Add(this.tbName);
             this.tpAddProcess.Controls.Add(this.btAdd);
-            this.tpAddProcess.Location = new System.Drawing.Point(4, 25);
+            this.tpAddProcess.Location = new System.Drawing.Point(4, 22);
+            this.tpAddProcess.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tpAddProcess.Name = "tpAddProcess";
-            this.tpAddProcess.Padding = new System.Windows.Forms.Padding(3);
-            this.tpAddProcess.Size = new System.Drawing.Size(768, 397);
+            this.tpAddProcess.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tpAddProcess.Size = new System.Drawing.Size(574, 320);
             this.tpAddProcess.TabIndex = 1;
             this.tpAddProcess.Text = "Add Processs";
             this.tpAddProcess.UseVisualStyleBackColor = true;
@@ -253,24 +294,27 @@ namespace planirovshik
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(16, 58);
+            this.label2.Location = new System.Drawing.Point(12, 47);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(156, 17);
+            this.label2.Size = new System.Drawing.Size(131, 15);
             this.label2.TabIndex = 4;
             this.label2.Text = "Priority (bigger - better)";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(16, 13);
+            this.label1.Location = new System.Drawing.Point(12, 11);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(45, 17);
+            this.label1.Size = new System.Drawing.Size(41, 15);
             this.label1.TabIndex = 3;
             this.label1.Text = "Name";
             // 
             // nudPriority
             // 
-            this.nudPriority.Location = new System.Drawing.Point(19, 78);
+            this.nudPriority.Location = new System.Drawing.Point(14, 63);
+            this.nudPriority.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.nudPriority.Maximum = new decimal(new int[] {
             5,
             0,
@@ -282,7 +326,7 @@ namespace planirovshik
             0,
             0});
             this.nudPriority.Name = "nudPriority";
-            this.nudPriority.Size = new System.Drawing.Size(120, 22);
+            this.nudPriority.Size = new System.Drawing.Size(90, 20);
             this.nudPriority.TabIndex = 2;
             this.nudPriority.Value = new decimal(new int[] {
             1,
@@ -292,16 +336,18 @@ namespace planirovshik
             // 
             // tbName
             // 
-            this.tbName.Location = new System.Drawing.Point(19, 33);
+            this.tbName.Location = new System.Drawing.Point(14, 27);
+            this.tbName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tbName.Name = "tbName";
-            this.tbName.Size = new System.Drawing.Size(100, 22);
+            this.tbName.Size = new System.Drawing.Size(76, 20);
             this.tbName.TabIndex = 1;
             // 
             // btAdd
             // 
-            this.btAdd.Location = new System.Drawing.Point(687, 368);
+            this.btAdd.Location = new System.Drawing.Point(515, 299);
+            this.btAdd.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btAdd.Name = "btAdd";
-            this.btAdd.Size = new System.Drawing.Size(75, 23);
+            this.btAdd.Size = new System.Drawing.Size(56, 19);
             this.btAdd.TabIndex = 0;
             this.btAdd.Text = "Add";
             this.btAdd.UseVisualStyleBackColor = true;
@@ -311,18 +357,20 @@ namespace planirovshik
             // 
             this.tpRemoveProcess.Controls.Add(this.btRemove);
             this.tpRemoveProcess.Controls.Add(this.lbProcesses);
-            this.tpRemoveProcess.Location = new System.Drawing.Point(4, 25);
+            this.tpRemoveProcess.Location = new System.Drawing.Point(4, 22);
+            this.tpRemoveProcess.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tpRemoveProcess.Name = "tpRemoveProcess";
-            this.tpRemoveProcess.Size = new System.Drawing.Size(768, 397);
+            this.tpRemoveProcess.Size = new System.Drawing.Size(574, 320);
             this.tpRemoveProcess.TabIndex = 2;
             this.tpRemoveProcess.Text = "Remove Process";
             this.tpRemoveProcess.UseVisualStyleBackColor = true;
             // 
             // btRemove
             // 
-            this.btRemove.Location = new System.Drawing.Point(690, 371);
+            this.btRemove.Location = new System.Drawing.Point(518, 301);
+            this.btRemove.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btRemove.Name = "btRemove";
-            this.btRemove.Size = new System.Drawing.Size(75, 23);
+            this.btRemove.Size = new System.Drawing.Size(56, 19);
             this.btRemove.TabIndex = 1;
             this.btRemove.Text = "Remove";
             this.btRemove.UseVisualStyleBackColor = true;
@@ -330,54 +378,73 @@ namespace planirovshik
             // lbProcesses
             // 
             this.lbProcesses.FormattingEnabled = true;
-            this.lbProcesses.ItemHeight = 16;
-            this.lbProcesses.Location = new System.Drawing.Point(3, 3);
+            this.lbProcesses.Location = new System.Drawing.Point(2, 2);
+            this.lbProcesses.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lbProcesses.Name = "lbProcesses";
-            this.lbProcesses.Size = new System.Drawing.Size(340, 388);
+            this.lbProcesses.Size = new System.Drawing.Size(256, 316);
             this.lbProcesses.TabIndex = 0;
             // 
-            // tbSpeed
+            // pbRam
             // 
-            this.tbSpeed.LargeChange = 10;
-            this.tbSpeed.Location = new System.Drawing.Point(630, 177);
-            this.tbSpeed.Maximum = 30;
-            this.tbSpeed.Minimum = 1;
-            this.tbSpeed.Name = "tbSpeed";
-            this.tbSpeed.Size = new System.Drawing.Size(132, 56);
-            this.tbSpeed.SmallChange = 5;
-            this.tbSpeed.TabIndex = 10;
-            this.tbSpeed.TickFrequency = 5;
-            this.tbSpeed.Value = 1;
-            this.tbSpeed.Scroll += new System.EventHandler(this.tbSpeed_Scroll);
+            this.pbRam.Location = new System.Drawing.Point(680, 30);
+            this.pbRam.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pbRam.Name = "pbRam";
+            this.pbRam.Size = new System.Drawing.Size(77, 19);
+            this.pbRam.TabIndex = 1;
             // 
-            // label5
+            // pbVram
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(631, 154);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(49, 17);
-            this.label5.TabIndex = 11;
-            this.label5.Text = "Speed";
+            this.pbVram.Location = new System.Drawing.Point(680, 63);
+            this.pbVram.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pbVram.Name = "pbVram";
+            this.pbVram.Size = new System.Drawing.Size(154, 19);
+            this.pbVram.TabIndex = 2;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(602, 32);
+            this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(76, 15);
+            this.label6.TabIndex = 8;
+            this.label6.Text = "RAM Usage:";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(595, 63);
+            this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(83, 15);
+            this.label7.TabIndex = 9;
+            this.label7.Text = "VRAM Usage:";
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(932, 366);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.pbVram);
+            this.Controls.Add(this.pbRam);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "Planner";
             this.tabControl1.ResumeLayout(false);
             this.tpExecute.ResumeLayout(false);
             this.tpExecute.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tbSpeed)).EndInit();
             this.tpAddProcess.ResumeLayout(false);
             this.tpAddProcess.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudPriority)).EndInit();
             this.tpRemoveProcess.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.tbSpeed)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -413,6 +480,10 @@ namespace planirovshik
         private System.Windows.Forms.ColumnHeader TimeLeftHeader;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TrackBar tbSpeed;
+        private System.Windows.Forms.ProgressBar pbRam;
+        private System.Windows.Forms.ProgressBar pbVram;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
     }
 }
 

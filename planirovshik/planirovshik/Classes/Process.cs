@@ -7,6 +7,7 @@ namespace planirovshik.Classes
     public enum ProcessState { Ready, Active, Waiting, Zombie }
     public class Process
     {
+        public bool RealOrVirtual { get; set; }
         public int SelfPriority { get; set; }
         
         public int TimeResource { get; set; }
@@ -29,6 +30,8 @@ namespace planirovshik.Classes
             this.Id = Id;
             this.Name = Name;
             this.TimeResource = TimeResource;
+            this.CurrentPriority = Priority;
+            this.State = ProcessState.Ready;
         }
 
 

@@ -50,6 +50,8 @@
     <Compile Include="Classes\PriorityScheduler.cs" />
     <Compile Include="Classes\Process.cs" />
     <Compile Include="Classes\ProcessManager.cs" />
+    <Compile Include="Classes\VirtualMemory.cs" />
+    <Compile Include="Classes\RandomAccessMemory.cs" />
     <Compile Include="Classes\RandomScheduler.cs" />
     <Compile Include="Interfaces\IScheduler.cs" />
     <Compile Include="Form1.cs">
